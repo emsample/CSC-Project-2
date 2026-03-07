@@ -16,7 +16,7 @@ int main()
 	double human=0;
 	double robo=0;
 	cout << "Hello, I'm the rock paper scissors champion, challenge me or die.\n" << endl;
-	while (!charCompare(choice, "quit"))
+	while (true)
 	{
 		choiceMaker(choice);
 		if (charCompare(choice, "quit"))
