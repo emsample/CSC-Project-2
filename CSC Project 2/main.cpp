@@ -2,8 +2,8 @@
 #include <cctype>
 #include <random>
 using namespace std;
-void winnerAnnounced(int, int, int);
-void scoreTracked(int, int&, int&, int&);
+void winnerAnnounced(int, double, double);
+void scoreTracked(int, int&, double&, double&);
 int gameTime(char*, const char*);
 const char* randomCPU();
 void choiceMaker(char* );
@@ -13,27 +13,29 @@ int main()
 {
 	char choice[15];
 	int plays=0;
-	int human=0;
-	int robo=0;
+	double human=0;
+	double robo=0;
 	cout << "Hello, I'm the rock paper scissors champion, challenge me or die.\n" << endl;
 	while (!charCompare(choice, "quit"))
 	{
 		choiceMaker(choice);
+		if (charCompare(choice, "quit"))
+		{
+			winnerAnnounced(plays, human, robo);
+			return 0;																								//might add more messages based on how many games you played 
+		}
 		scoreTracked(gameTime(choice, randomCPU()), plays, human, robo);
-	}
-	if (charCompare(choice, "quit"))
-	{
-		winnerAnnounced(plays, human, robo);													//might add more messages based on how many games you played 
 	}
 }
 void choiceMaker(char* select)
 {
-	cout << "Enter:\n\nRock\n\nPaper\n\nScissors\n\nQuit\n\n";
+	cout << "1 point for a win : 0 points for a loss : 0.5 points for a draw" << endl;
+	cout << "Enter:\n\nRock\n\nPaper\n\nScissors\n\nQuit\n\n" << endl;
 	cin >> select;
 	while (!inputVal(select))
 	{
 		cout << "\nInvalid input, don't be a baby and play >:(\n" << endl;
-		cout << "Enter:\n\nRock\n\nPaper\n\nScissors\n\nQuit\n\n";
+		cout << "Enter:\n\nRock\n\nPaper\n\nScissors\n\nQuit\n\n" << endl;
 		cin >> select;
 	}
 }
@@ -99,7 +101,7 @@ int gameTime(char* player, const char* CPU)
 		return 2;
 	}																																								//need to compare the CPU to what beats the player, if it matches the CPU wins
 }
-void scoreTracked(int win, int &games, int &pscore, int &cscore)
+void scoreTracked(int win, int &games, double &pscore, double &cscore)
 {
 	if (win == 0)
 	{
@@ -117,10 +119,10 @@ void scoreTracked(int win, int &games, int &pscore, int &cscore)
 		games++;
 		cscore += 1;
 	}
-	cout << "\nThe number of games played: " << games << endl << "\nYour score: " << pscore << endl << "\nMy score: " << cscore << endl;
+	cout << "\nThe number of games played: " << games << endl << "Your score: " << pscore << endl << "My score: " << cscore << endl << endl;
 }
 
-void winnerAnnounced(int total, int person, int compute)
+void winnerAnnounced(int total, double person, double compute)
 {
 	if (total == 0)
 	{
