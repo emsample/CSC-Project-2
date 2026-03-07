@@ -1,20 +1,29 @@
 #include <iostream>
+#include <cctype>
 #include <random>
 using namespace std;
-int gameTime(char* player, const char* CPU);
+void winnerAnnounced(int, int, int);
+void scoreTracked(int, int&, int&, int&);
+int gameTime(char*, const char*);
 const char* randomCPU();
-void choiceMaker(char* select);
-bool inputVal(char* check);
-bool charCompare(char* input, const char* options);
+void choiceMaker(char* );
+bool inputVal(char* );
+bool charCompare(char*, const char*);
 int main()
 {
 	char choice[15];
+	int plays=0;
+	int human=0;
+	int robo=0;
 	cout << "Hello, I'm the rock paper scissors champion, challenge me or die.\n" << endl;
-	choiceMaker(choice);
+	while (!charCompare(choice, "quit"))
+	{
+		choiceMaker(choice);
+		scoreTracked(gameTime(choice, randomCPU()), plays, human, robo);
+	}
 	if (charCompare(choice, "quit"))
 	{
-		cout << "\nSore loser, or just scared to take me on?";													//might add more messages based on how many games you played but maybe over the top
-		return 0;
+		winnerAnnounced(plays, human, robo);													//might add more messages based on how many games you played 
 	}
 }
 void choiceMaker(char* select)
@@ -57,6 +66,7 @@ const char* randomCPU()
 	static std::uniform_int_distribution<int> RPS(0, 2);
 	const char* random[3] = { "rock", "paper", "scissors" };
 	int i = RPS(roll);
+	cout << endl << "I rolled " << random[i] << endl;
 	return random[i];
 
 }
@@ -64,14 +74,72 @@ int gameTime(char* player, const char* CPU)
 {
 	const char* compare[3] = { "rock", "paper", "scissors" };
 	const char* contrast[3] = { "paper", "scissors", "rock" };
-	if (charCompare(player, CPU))
-		return 0;
-	for (const char* look : compare)
+	for (int i=0; i<3; i++)
 	{
-		for (const char* see : contrast)
+		if (charCompare(player, compare[i]) && charCompare((char*)CPU, contrast[i]))
 		{
-			if (charCompare(player, look) && charCompare((char*)CPU,)
+			cout << "\nAs expected, I am victorious" << endl;
+			return -1;
 		}
+		if (charCompare((char*)CPU, compare[i]) && charCompare(player, contrast[i]))
+		{
+			cout << "\nyou.... won? Is this a joke? You must be cheating, I'm calling the police I want a do-over" << endl;
+			return 1;
+		}
+		
 	}
-																								//need to compare the CPU to what beats the player, if it matches the CPU wins
+	if (charCompare(player, CPU))
+	{
+		cout << "\nTie game, you got lucky bub" << endl;
+		return 0;
+	}	
+	else
+	{
+		cout << "\nSomething has gone terribly wrong..." << endl;
+		return 2;
+	}																																								//need to compare the CPU to what beats the player, if it matches the CPU wins
+}
+void scoreTracked(int win, int &games, int &pscore, int &cscore)
+{
+	if (win == 0)
+	{
+		games++;
+		pscore += 0.5;
+		cscore += 0.5;
+	}
+	if (win == 1)
+	{
+		games++;
+		pscore += 1;
+	}
+	if (win == -1)
+	{
+		games++;
+		cscore += 1;
+	}
+	cout << "\nThe number of games played: " << games << endl << "\nYour score: " << pscore << endl << "\nMy score: " << cscore << endl;
+}
+
+void winnerAnnounced(int total, int person, int compute)
+{
+	if (total == 0)
+	{
+		cout << "\nYou're shaking with fear, I think its best you ran off where you came from buddy" << endl;
+		return;
+	}
+	if (person > compute)
+	{
+		cout << "\nOf course you would decide to stop now. Over the course of " << total << " games YOU WON?!?! with a score of " << person << " to my " << compute << endl;
+		cout << ".....\n.......\n.........\n This insult will not be forgotten" << endl;
+	}
+	if (person < compute)
+	{
+		cout << "Wow, you're a pretty sore loser huh? Giving up already? As expected I destroyed you with a score of " << compute << " to your paltry " << person << " over " << total << "games" << endl;
+		cout << "It was an easy victory for me" << endl;
+	}
+	if (person == compute)
+	{
+		cout << "Yeah I was getting bored anyway, let's see here the score was- A TIE??!!! THIS CANNOT BE RIGHT I WANT AN APPEAL NO WAY WE HAD A SCORE OF " << person << " to " << compute << " in " << total << "games" << endl;
+	}
+	return;
 }
