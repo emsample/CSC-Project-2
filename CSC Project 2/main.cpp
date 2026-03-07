@@ -2,8 +2,8 @@
 #include <cctype>
 #include <random>
 using namespace std;
-void winnerAnnounced(int, double, double);
-void scoreTracked(int, int&, double&, double&);
+void winnerAnnounced(int, double, double, int, int, int);
+void scoreTracked(int, int&, double&, double&, int&, int&, int&);
 int gameTime(char*, const char*);
 const char* randomCPU();
 void choiceMaker(char* );
@@ -12,7 +12,7 @@ bool charCompare(char*, const char*);
 int main()
 {
 	char choice[15];
-	int plays=0;
+	int plays=0, victory=0, loss=0, tie=0;
 	double human=0;
 	double robo=0;
 	cout << "Hello, I'm the rock paper scissors champion, challenge me or die.\n" << endl;
@@ -21,10 +21,10 @@ int main()
 		choiceMaker(choice);
 		if (charCompare(choice, "quit"))
 		{
-			winnerAnnounced(plays, human, robo);
+			winnerAnnounced(plays, human, robo, victory, loss, tie);
 			return 0;																								//might add more messages based on how many games you played 
 		}
-		scoreTracked(gameTime(choice, randomCPU()), plays, human, robo);
+		scoreTracked(gameTime(choice, randomCPU()), plays, human, robo, victory, loss, tie);
 	}
 }
 void choiceMaker(char* select)
@@ -101,28 +101,31 @@ int gameTime(char* player, const char* CPU)
 		return 2;
 	}																																								//need to compare the CPU to what beats the player, if it matches the CPU wins
 }
-void scoreTracked(int win, int &games, double &pscore, double &cscore)
+void scoreTracked(int win, int &games, double &pscore, double &cscore, int& w, int& l, int& t)
 {
 	if (win == 0)
 	{
+		t++;
 		games++;
 		pscore += 0.5;
 		cscore += 0.5;
 	}
 	if (win == 1)
 	{
+		w++;
 		games++;
 		pscore += 1;
 	}
 	if (win == -1)
 	{
+		l++;
 		games++;
 		cscore += 1;
 	}
-	cout << "\nThe number of games played: " << games << endl << "Your score: " << pscore << endl << "My score: " << cscore << endl << endl;
+	cout << "\nThe number of games played: " << games << endl << "Your score: " << pscore << " " << w << "W/" << l << "L/" << t << "T" << endl << "My score: " << cscore << " " << l << "W/" << w << "L/" << t << "T" << endl << endl;
 }
 
-void winnerAnnounced(int total, double person, double compute)
+void winnerAnnounced(int total, double person, double compute, int ww, int ll, int tt)
 {
 	if (total == 0)
 	{
@@ -131,17 +134,17 @@ void winnerAnnounced(int total, double person, double compute)
 	}
 	if (person > compute)
 	{
-		cout << "\nOf course you would decide to stop now. Over the course of " << total << " games YOU WON?!?! with a score of " << person << " to my " << compute << endl;
-		cout << ".....\n.......\n.........\n This insult will not be forgotten" << endl;
+		cout << "\nOf course you would decide to stop now. Over the course of " << total << " games YOU WON?!?! with a score of " << person << " points with a record of " << ww << "W/" << ll << "L/" << tt << "T" << " to my " << compute << " points with a record of " << ll << "W/" << ww << "L/" << tt << "T" << endl;
+		cout << "\n.....\n\n.......\n\n.........\n\n This insult will not be forgotten..." << endl;
 	}
 	if (person < compute)
 	{
-		cout << "Wow, you're a pretty sore loser huh? Giving up already? As expected I destroyed you with a score of " << compute << " to your paltry " << person << " over " << total << "games" << endl;
+		cout << "Wow, you're a pretty sore loser huh? Giving up already? As expected I destroyed you with a score of " << compute << " points with a record of " << ll << "W/" << ww << "L/" << tt << "T" << " to your paltry " << person << " points with a record of " << ww << "W/" << ll << "L/" << tt << "T" << " over " << total << "games" << endl;
 		cout << "It was an easy victory for me" << endl;
 	}
 	if (person == compute)
 	{
-		cout << "Yeah I was getting bored anyway, let's see here the score was- A TIE??!!! THIS CANNOT BE RIGHT I WANT AN APPEAL NO WAY WE HAD A SCORE OF " << person << " to " << compute << " in " << total << "games" << endl;
+		cout << "Yeah I was getting bored anyway, let's see here the score was- A TIE??!!! THIS CANNOT BE RIGHT I WANT AN APPEAL NO WAY WE HAD A SCORE OF YOUR " << person << " points with a record of " << ww << "W/" << ll << "L/" << tt << "T" << " TO MY " << compute << " points with a record of " << ll << "W/" << ww << "L/" << tt << "T" << " in " << total << "games" << endl;
 	}
 	return;
 }
