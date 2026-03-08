@@ -12,7 +12,7 @@ bool charCompare(char*, const char*);
 int main()
 {
 	char choice[15];
-	int plays=0, victory=0, loss=0, tie=0;
+	int games=0, wins=0, loss=0, tie=0;
 	double human=0;
 	double robo=0;
 	cout << "Hello, I'm the rock paper scissors champion, challenge me or die.\n" << endl;
@@ -20,46 +20,46 @@ int main()
 		choiceMaker(choice);
 		if (charCompare(choice, "quit"))
 		{
-			winnerAnnounced(plays, human, robo, victory, loss, tie);
+			winnerAnnounced(games, human, robo, wins, loss, tie);
 			return 0;																								//might add more messages based on how many games you played 
 		}
-		scoreTracked(gameTime(choice, randomCPU()), plays, human, robo, victory, loss, tie);
+		scoreTracked(gameTime(choice, randomCPU()), games, human, robo, wins, loss, tie);
 	}
 }
-void choiceMaker(char* select)
+void choiceMaker(char* choice)
 {
 	cout << "1 point for a win : 0 points for a loss : 0.5 points for a draw" << endl;
 	cout << "Enter:\n\nRock\n\nPaper\n\nScissors\n\nQuit\n\n" << endl;
-	cin >> select;
-	while (!inputVal(select))
+	cin >> choice;
+	while (!inputVal(choice))
 	{
 		cout << "\nInvalid input, don't be a baby and play >:(\n" << endl;
 		cout << "Enter:\n\nRock\n\nPaper\n\nScissors\n\nQuit\n\n" << endl;
-		cin.getline(select, 15);																	//changed to avoid overflow if user inputs more than 14 characters
+		cin.getline(choice, 15);																	//changed to avoid overflow if user inputs more than 14 characters
 	}
 }
-bool inputVal(char* check)																			//when i took egr125 i did not understand boolean stuff at all, but now having taken a different class about it, its pretty useful might change this to int though
+bool inputVal(char* choice)																			//when i took egr125 i did not understand boolean stuff at all, but now having taken a different class about it, its pretty useful might change this to int though
 {
 	const char* valid[4] = { "rock", "paper", "scissors", "quit" };
 	for (const char* comp : valid)
 	{
-		if (charCompare(check, comp)) 
+		if (charCompare(choice, comp)) 
 		{
 			return true;
 		}
 	}
 	return false; 
 }
-bool charCompare(char* input, const char* options)																//i considered using strcmp but that felt out of the spirit of the assignment
+bool charCompare(char* choice, const char* options)																//i considered using strcmp but that felt out of the spirit of the assignment
 {
-	while (*input != '\0' && *options != '\0')
+	while (*choice != '\0' && *options != '\0')
 	{
-		if (tolower(*input) != *options)
+		if (tolower(*choice) != *options)
 			return false;
-		input++;
+		choice++;
 		options++;
 	}
-	return *input == '\0' && *options == '\0';
+	return *choice == '\0' && *options == '\0';
 }
 const char* randomCPU()
 {
@@ -99,50 +99,50 @@ int gameTime(char* player, const char* CPU)
 		return 2;
 	}																																								//need to compare the CPU to what beats the player, if it matches the CPU wins
 }
-void scoreTracked(int win, int &games, double &pscore, double &cscore, int& w, int& l, int& t)
+void scoreTracked(int result, int &games, double &human, double &robo, int& w, int& l, int& t)
 {
-	if (win == 0)
+	if (result == 0)
 	{
 		t++;
 		games++;
-		pscore += 0.5;
-		cscore += 0.5;
+		human += 0.5;
+		robo += 0.5;
 	}
-	if (win == 1)
+	if (result == 1)
 	{
 		w++;
 		games++;
-		pscore += 1;
+		human += 1;
 	}
-	if (win == -1)
+	if (result == -1)
 	{
 		l++;
 		games++;
-		cscore += 1;
+		robo += 1;
 	}
-	cout << "\nThe number of games played: " << games << endl << "Your score: " << pscore << " " << w << "W/" << l << "L/" << t << "T" << endl << "My score: " << cscore << " " << l << "W/" << w << "L/" << t << "T" << endl << endl;
+	cout << "\nThe number of games played: " << games << endl << "Your score: " << human << " " << w << "W/" << l << "L/" << t << "T" << endl << "My score: " << robo << " " << l << "W/" << w << "L/" << t << "T" << endl << endl;
 }
 
-void winnerAnnounced(int total, double person, double compute, int ww, int ll, int tt)
+void winnerAnnounced(int games, double human, double robo, int w, int l, int t)
 {
-	if (total == 0)
+	if (games == 0)
 	{
 		cout << "\nYou're shaking with fear, I think its best you ran off where you came from buddy" << endl;
 		return;
 	}
-	if (person > compute)
+	if (human > robo)
 	{
-		cout << "\nOf course you would decide to stop now. Over the course of " << total << " games YOU WON?!?! with a score of " << person << " points with a record of " << ww << "W/" << ll << "L/" << tt << "T" << " to my " << compute << " points with a record of " << ll << "W/" << ww << "L/" << tt << "T" << endl;
+		cout << "\nOf course you would decide to stop now. Over the course of " << games << " games YOU WON?!?! with a score of " << human << " points with a record of " << w << "W/" << l << "L/" << t << "T" << " to my " << robo << " points with a record of " << l << "W/" << w << "L/" << t << "T" << endl;
 		cout << "\n.....\n\n.......\n\n.........\n\n This insult will not be forgotten..." << endl;
 	}
-	if (person < compute)
+	if (human < robo)
 	{
-		cout << "Wow, you're a pretty sore loser huh? Giving up already? As expected I destroyed you with a score of " << compute << " points with a record of " << ll << "W/" << ww << "L/" << tt << "T" << " to your paltry " << person << " points with a record of " << ww << "W/" << ll << "L/" << tt << "T" << " over " << total << "games" << endl;
+		cout << "Wow, you're a pretty sore loser huh? Giving up already? As expected I destroyed you with a score of " << robo << " points with a record of " << l << "W/" << w << "L/" << t << "T" << " to your paltry " << human << " points with a record of " << w << "W/" << l << "L/" << t << "T" << " over " << games << "games" << endl;
 		cout << "It was an easy victory for me" << endl;
 	}
-	if (person == compute)
+	if (human == robo)
 	{
-		cout << "Yeah I was getting bored anyway, let's see here the score was- A TIE??!!! THIS CANNOT BE RIGHT I WANT AN APPEAL NO WAY WE HAD A SCORE OF YOUR " << person << " points with a record of " << ww << "W/" << ll << "L/" << tt << "T" << " TO MY " << compute << " points with a record of " << ll << "W/" << ww << "L/" << tt << "T" << " in " << total << "games" << endl;
+		cout << "Yeah I was getting bored anyway, let's see here the score was- A TIE??!!! THIS CANNOT BE RIGHT I WANT AN APPEAL NO WAY WE HAD A SCORE OF YOUR " << human << " points with a record of " << w << "W/" << l << "L/" << t << "T" << " TO MY " << robo << " points with a record of " << l << "W/" << w << "L/" << t << "T" << " in " << games << "games" << endl;
 	}
 	return;
 }
