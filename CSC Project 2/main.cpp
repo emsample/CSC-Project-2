@@ -19,12 +19,12 @@ int main()
 	while (true)
 	{
 		choiceMaker(choice);
-		if (charCompare(choice, "quit"))
+		if (charCompare(choice, "quit"))														//ends the loop that will go forever otherwise
 		{
 			winnerAnnounced(games, human, robo, wins, loss, tie);
 			return 0;																								//might add more messages based on how many games you played 
 		}
-		scoreTracked(gameTime(choice, randomCPU()), games, human, robo, wins, loss, tie);
+		scoreTracked(gameTime(choice, randomCPU()), games, human, robo, wins, loss, tie);			//so clean here
 	}
 }
 void choiceMaker(char* choice)
@@ -32,9 +32,9 @@ void choiceMaker(char* choice)
 	cout << "1 point for a win : 0 points for a loss : 0.5 points for a draw\n" << endl;
 	cout << "Enter:\n\nRock\n\nPaper\n\nScissors\n\nQuit\n\n" << endl;
 	cin.width(15);
-	cin >> choice;
+	cin >> choice;													//got some protection against big inputs but its not perfect
 	cin.ignore(1000, '\n');
-	while (!inputVal(choice))
+	while (!inputVal(choice))																//when the imput val fails we try again
 	{
 		cout << "\nInvalid input, don't be a baby and play >:(\n" << endl;
 		cout << "Enter:\n\nRock\n\nPaper\n\nScissors\n\nQuit\n\n" << endl;
@@ -47,30 +47,30 @@ void choiceMaker(char* choice)
 bool inputVal(char* choice)																			//when i took egr125 i did not understand boolean stuff at all, but now having taken a different class about it, its pretty useful might change this to int though
 {
 	const char* valid[4] = { "rock", "paper", "scissors", "quit" };
-	for (const char* comp : valid)
+	for (const char* comp : valid)								//gonn comnpare the input to each possible option
 	{
-		if (charCompare(choice, comp)) 
+		if (charCompare(choice, comp))					//send it to our manual char compare function, strcmp seemed out of spirit of the assignment
 		{
-			return true;
+			return true;									//keeps out input loop going
 		}
 	}
 	return false; 
 }
 bool charCompare(char* choice, const char* options)																//i considered using strcmp but that felt out of the spirit of the assignment
 {
-	while (*choice != '\0' && *options != '\0')
+	while (*choice != '\0' && *options != '\0')									//this compares each individual char in the array until both are at the null character
 	{
-		if (tolower(*choice) != *options)
-			return false;
-		choice++;
+		if (tolower(*choice) != *options)						//change to lowercase so that it doesn't matter
+			return false;										//if they are ever different immediately fail the check
+		choice++;												//then do it for the next character
 		options++;
 	}
-	return *choice == '\0' && *options == '\0';
+	return *choice == '\0' && *options == '\0';							//this will prevent things like rockk ffrom being valid inputs
 }
 const char* randomCPU()
 {
 	static std::default_random_engine roll;
-	static std::uniform_int_distribution<int> RPS(0, 2);
+	static std::uniform_int_distribution<int> RPS(0, 2);					//pretty simply 
 	const char* random[3] = { "rock", "paper", "scissors" };
 	int i = RPS(roll);
 	cout << endl << "I rolled " << random[i] << endl;
@@ -86,7 +86,7 @@ int gameTime(char* player, const char* CPU)
 		if (charCompare(player, compare[i]) && charCompare((char*)CPU, contrast[i]))										//casting the CPU char array because that's what made it work
 		{
 			cout << "\nAs expected, I am victorious" << endl;
-			return -1;
+			return -1;																					//using an integer to signify the result, and using our charCompare, this is why we made it seperate from the rest of the input val
 		}
 		if (charCompare((char*)CPU, compare[i]) && charCompare(player, contrast[i]))
 		{
@@ -104,11 +104,11 @@ int gameTime(char* player, const char* CPU)
 	{
 		cout << "\nSomething has gone terribly wrong..." << endl;
 		return 2;
-	}																																								//need to compare the CPU to what beats the player, if it matches the CPU wins
+	}																							//need to compare the CPU to what beats the player, if it matches the CPU wins
 }
 void scoreTracked(int result, int &games, double &human, double &robo, int& w, int& l, int& t)
 {
-	if (result == 0)
+	if (result == 0)												//just check the result and then add to the appropriate totals
 	{
 		t++;
 		games++;
@@ -153,3 +153,4 @@ void winnerAnnounced(int games, double human, double robo, int w, int l, int t)
 	}
 	return;
 }
+//I had some fun with the robot personality
