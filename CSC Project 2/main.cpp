@@ -78,7 +78,7 @@ int gameTime(char* player, const char* CPU)
 	const char* contrast[3] = { "paper", "scissors", "rock" };
 	for (int i=0; i<3; i++)
 	{
-		if (charCompare(player, compare[i]) && charCompare((char*)CPU, contrast[i]))
+		if (charCompare(player, compare[i]) && charCompare((char*)CPU, contrast[i]))										//casting the CPU char array because that's what made it work. Definitely feel like I should be able to make both arguments const chars
 		{
 			cout << "\nAs expected, I am victorious" << endl;
 			return -1;
