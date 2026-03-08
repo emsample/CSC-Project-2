@@ -35,7 +35,7 @@ void choiceMaker(char* select)
 	{
 		cout << "\nInvalid input, don't be a baby and play >:(\n" << endl;
 		cout << "Enter:\n\nRock\n\nPaper\n\nScissors\n\nQuit\n\n" << endl;
-		cin >> select;
+		cin.getline(select, 15);																	//changed to avoid overflow if user inputs more than 14 characters
 	}
 }
 bool inputVal(char* check)																			//when i took egr125 i did not understand boolean stuff at all, but now having taken a different class about it, its pretty useful might change this to int though
