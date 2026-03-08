@@ -153,4 +153,4 @@ void winnerAnnounced(int games, double human, double robo, int w, int l, int t)
 	}
 	return;
 }
-//I had some fun with the robot personality
+//I had some fun with the robot personality, mde sure to give a special message if you didn't play at all
