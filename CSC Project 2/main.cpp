@@ -29,14 +29,19 @@ int main()
 }
 void choiceMaker(char* choice)
 {
-	cout << "1 point for a win : 0 points for a loss : 0.5 points for a draw" << endl;
+	cout << "1 point for a win : 0 points for a loss : 0.5 points for a draw\n" << endl;
 	cout << "Enter:\n\nRock\n\nPaper\n\nScissors\n\nQuit\n\n" << endl;
-	cin.getline(choice, 15);
+	cin.width(15);
+	cin >> choice;
+	cin.ignore(1000, '\n');
 	while (!inputVal(choice))
 	{
 		cout << "\nInvalid input, don't be a baby and play >:(\n" << endl;
 		cout << "Enter:\n\nRock\n\nPaper\n\nScissors\n\nQuit\n\n" << endl;
-		cin.getline(choice, 15);																	//changed to avoid overflow if user inputs more than 14 characters
+		cin.width(15); 
+		cin >> choice;
+		cin.ignore(1000, '\n');
+																											//changed to avoid overflow if user inputs more than 14 characters
 	}
 }
 bool inputVal(char* choice)																			//when i took egr125 i did not understand boolean stuff at all, but now having taken a different class about it, its pretty useful might change this to int though
